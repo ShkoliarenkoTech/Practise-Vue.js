@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students sheet</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-button {
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
+        .red {
+             color: red;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <label for="search">Пошук:</label>
+        <input type="text" id="search" v-model="searchQuery">
+
+
+        <div class="addButtonBlock">
+            <input id="inputId" type="text" v-model="studentId" placeholder="Enter new student data" disabled>
+            <input type="text" placeholder="Ім'я" v-model="firstName">
+            <input type="text" placeholder="Прізвище" v-model="lastName">
+            <input type="text" placeholder="Рік_народження" v-model="birthDate">
+            <input type="text" placeholder="Група" v-model="group">
+            <label>Здав</label><input type="checkbox" placeholder="Здав" v-model="passed">
+
+            <button @click="students.push({'id':students.length+1,
+            'firstName':firstName,'lastName':lastName, 'birthDate':birthDate,'group':group, 'passed':passed})">
+                Додати
+            </button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ім'я</th>
+                    <th>Прізвище</th>
+                    <th>Дата народження</th>
+                    <th>Група</th>
+                    <th>Здав</th>
+                    <th>Видалити</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in students" :key="student.id">
+                    <td>{{ student.firstName }}</td>
+                    <td v-bind:class= "{red : student.lastName.includes(searchQuery) && searchQuery!=''}">{{ student.lastName }}</td>
+                    <td>{{ student.birthDate }}</td>
+                    <td>{{ student.group }}</td>
+                    <td>
+                        <input type="checkbox" v-model="student.passed">
+                    </td>
+                    <td>
+                        <button class="delete-button" @click="deleteStudent(student.id)">Видалити</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <script>
+        const { ref, computed } = Vue;
+
+        Vue.createApp({
+            data() {
+                return {
+                    students: [
+                        { id: 1, lastName: 'Клименко', firstName: 'Іван', birthDate: '01.05.2005', group: 'РПЗ 20 2/9', passed: true },
+                        { id: 2, lastName: 'Степанюк', firstName: 'Ігор', birthDate: '29.12.2006', group: 'РПЗ 20 2/9', passed: false },
+                        { id: 3, lastName: 'Чегринський', firstName: 'Олесь', birthDate: '10.11.2005', group: 'РПЗ 20 2/9', passed: true },
+                        { id: 4, lastName: 'Прапорець', firstName: 'Дмитро', birthDate: '04.01.2003', group: 'РПЗ 20 2/9', passed: false },
+                        { id: 5, lastName: 'Червоний', firstName: 'Василь', birthDate: '05.06.2004', group: 'РПЗ 20 2/9', passed: true }
+                    ],
+                    searchQuery: ''
+                };
+                
+            },
+            methods: {
+                deleteStudent(id) {
+                    this.students = this.students.filter(student => student.id !== id); 
+                },
+                addStudent()
+                {
+                    students.value = students.value.push({'id':(students.value.length)+1,'Ім`я':firstName,'Прізвище':lastName,
+                    'Рік_народження':birthDate, 'Група':group, 'Здав':passed})
+
+                    
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+
+</html>
